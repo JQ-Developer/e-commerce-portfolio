@@ -4,6 +4,7 @@ import { Switch, Route } from "react-router-dom";
 
 import HomePage from "./pages/homepage/homepage.component";
 import ShopPage from "./pages/shopage/shop.component";
+import Header from "./components/header/header.component";
 
 const HatsPage = () => (
   <div>
@@ -14,6 +15,7 @@ const HatsPage = () => (
 function App() {
   return (
     <div>
+      <Header />
       <Switch>
         <Route exact path="/" component={HomePage} />
         <Route path="/shop" component={ShopPage} />
@@ -45,3 +47,6 @@ export default App;
 //?Solamente el elemento que se le pone a Router tiene acceso a esa propiedades por lo tanto si quiero obtenerlas debo hacerlas de la manera correcta, no haciendo un tunel entre los componentes(prop drilling).
 //? Imortando "withRouter" nos da acceso a una funcion de orden superior que toma como argumento un componente y le da acceso a los props de los que estuve hablando arriba.
 //?You can get access to the history object’s properties and the closest <Route>'s match via the withRouter higher-order component. withRouter will pass updated match, location, and history props to the wrapped component whenever it renders.
+
+//? Para importar un SVG se usa la palabra "ReactComponent" de la siguinete manera:
+//* import {ReactComponent as Logo} from ...
