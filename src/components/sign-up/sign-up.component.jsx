@@ -30,6 +30,7 @@ class SignUp extends Component {
     }
 
     try {
+      //Esta funcion crea un objeto con un usuario y contraseña
       const { user } = await auth.createUserWithEmailAndPassword(
         email,
         password
@@ -106,5 +107,7 @@ class SignUp extends Component {
     );
   }
 }
+
+//! una vez añadida la opcin de crear una cuenta con correo en firebase debo existe la opcion de confirmación de correo electronico
 
 export default SignUp;
