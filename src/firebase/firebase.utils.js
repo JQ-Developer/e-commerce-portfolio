@@ -4,13 +4,13 @@ import "firebase/auth";
 
 // Yihua's config
 const config = {
-  apiKey: "AIzaSyCdHT-AYHXjF7wOrfAchX4PIm3cSj5tn14",
-  authDomain: "crwn-db.firebaseapp.com",
-  databaseURL: "https://crwn-db.firebaseio.com",
-  projectId: "crwn-db",
-  storageBucket: "crwn-db.appspot.com",
-  messagingSenderId: "850995411664",
-  appId: "1:850995411664:web:7ddc01d597846f65",
+  apiKey: "AIzaSyCkTG7MBe_V5vqo1HxhuWJfssHbG8HAAKw",
+  authDomain: "crown-ecomerce-react.firebaseapp.com",
+  projectId: "crown-ecomerce-react",
+  storageBucket: "crown-ecomerce-react.appspot.com",
+  messagingSenderId: "428364557619",
+  appId: "1:428364557619:web:1739d84fb1585747ab2246",
+  measurementId: "G-YBRXCZ3CW7",
 };
 //
 
