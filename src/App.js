@@ -6,7 +6,7 @@ import HomePage from "./pages/homepage/homepage.component";
 import ShopPage from "./pages/shopage/shop.component";
 import SignInSignUpPage from "./pages/sign-in-up/sign-in-up.component";
 import Header from "./components/header/header.component";
-import { auth } from "./firebase/firebase.utils";
+import { auth, createUserProfileDocument } from "./firebase/firebase.utils";
 
 class App extends React.Component {
   constructor() {
@@ -23,10 +23,27 @@ class App extends React.Component {
     //Este metodo es un observador el cual recibe informacion de firebase, diciendole si el usuario tiene la secion iniciada
     //
 
-    this.unsubscribeFromAuth = auth.onAuthStateChanged((user) => {
-      this.setState({ currentUser: user });
+    this.unsubscribeFromAuth = auth.onAuthStateChanged(async (userAuth) => {
+      if (userAuth) {
+        const userRef = await createUserProfileDocument(userAuth);
 
-      console.log(user);
+        //Este metodo me dice si se ha actualizado la base de datos del documento referencia, normalmente no se actualiz pero me da un snapshot que puedo añadir a mi estado de usuario this.state.currentUser
+        userRef.onSnapshot((snapShot) => {
+          //los snapshots tienen un metodo llamado data, que de da un objeto con las propiedades que yo definí para el mismo, sin embargo no me da el id
+          this.setState({
+            currentUser: { id: snapShot.id, ...snapShot.data() },
+          });
+
+          console.log(this.state);
+        });
+      } else {
+        this.setState({ currentUser: userAuth });
+      }
+
+      //createUserProfileDocument(user);
+
+      //this.setState({ currentUser: user });
+      //console.log(user);
     });
   }
 
@@ -73,3 +90,16 @@ export default App;
 
 //? Para importar un SVG se usa la palabra "ReactComponent" de la siguinete manera:
 //* import {ReactComponent as Logo} from ...
+
+//! Firebase
+//? Es una base de datos no-sql
+//? Para hacer un crud con inicio de sesion con google hay que escribir codigo pero también hay que configurarlo en firestone autenticación
+//? Las bases de datos en firebase básicamente consisten en colecciones y documentos
+//? La manera de query them es aspi
+//* firebase.firestore().collection('users').doc('idcode').collection(cartItems).doc('idCode')
+//? otra manera es
+//*firestore().doc('users/idcode/cartItems/idCode')
+//Si lo que busco es una collection entoces debo poner collection.
+//? Un query es básicamente pedir por un dato en la database, lo de arriba es un query
+//? Firebase nos puede regresar dos tipos de objetos, un QueryReference: que no nos da la data verdadera sino las propiedades que nos dicen los tellades sobre ello.
+//? Hay maneras de pedir por esta referencia, ver el pdf de la leccion 13.1/carp 7, pero los crud se hacen desde la referencia del documento, para todo lo CRUD se usa el documenRef object.
