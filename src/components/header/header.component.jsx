@@ -1,5 +1,8 @@
 import { Link } from "react-router-dom";
 
+//Redux, trayendo los datos para el currentUser directo desde la base central, no de app.js, connect es un componente de orden superior.
+import { connect } from "react-redux";
+
 import { auth } from "../../firebase/firebase.utils";
 
 import { ReactComponent as Logo } from "../../assets/crown.svg";
@@ -32,4 +35,14 @@ const Header = ({ currentUser }) => (
   </div>
 );
 
-export default Header;
+//connect es una funcion que toma dos argumentos, uno con el state que necesita el componente con el componente, para ello creo un afuncion que mapee las propiedades que necesita el componente y se la paso al metodo connect directamente desde el RootReducer.
+
+//state => rootReducer, user.currentUser=> desde el userReducer
+
+//EL nombre de la propiedad debe ser igual al prop que se le pasa al componente
+
+const mapStateToProps = (state) => ({
+  currentUser: state.user.currentUser,
+});
+
+export default connect(mapStateToProps)(Header);

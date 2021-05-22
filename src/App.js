@@ -2,13 +2,20 @@ import React from "react";
 import "./App.css";
 import { Switch, Route } from "react-router-dom";
 
+//React redux
+import { connect } from "react-redux";
+
 import HomePage from "./pages/homepage/homepage.component";
 import ShopPage from "./pages/shopage/shop.component";
 import SignInSignUpPage from "./pages/sign-in-up/sign-in-up.component";
 import Header from "./components/header/header.component";
 import { auth, createUserProfileDocument } from "./firebase/firebase.utils";
 
+//Importando la accion
+import { setCurrentUser } from "./redux/user/user.actions";
+
 class App extends React.Component {
+  /*
   constructor() {
     super();
 
@@ -16,10 +23,12 @@ class App extends React.Component {
       currentUser: null,
     };
   }
-
+  */
   unsubscribeFromAuth = null;
 
   componentDidMount() {
+    const { setCurrentUser } = this.props;
+
     //Este metodo es un observador el cual recibe informacion de firebase, diciendole si el usuario tiene la secion iniciada
     //
 
@@ -30,14 +39,22 @@ class App extends React.Component {
         //Este metodo me dice si se ha actualizado la base de datos del documento referencia, normalmente no se actualiz pero me da un snapshot que puedo añadir a mi estado de usuario this.state.currentUser
         userRef.onSnapshot((snapShot) => {
           //los snapshots tienen un metodo llamado data, que de da un objeto con las propiedades que yo definí para el mismo, sin embargo no me da el id
+          /*
           this.setState({
             currentUser: { id: snapShot.id, ...snapShot.data() },
+          });
+          */
+
+          setCurrentUser({
+            id: snapShot.id,
+            ...snapShot.data(),
           });
 
           //console.log(this.state);
         });
       } else {
-        this.setState({ currentUser: userAuth });
+        //this.setState({ currentUser: userAuth });
+        setCurrentUser(userAuth);
       }
 
       //createUserProfileDocument(user);
@@ -54,7 +71,7 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <Header currentUser={this.state.currentUser} />
+        <Header /*currentUser={this.state.currentUser}*/ />
         <Switch>
           <Route exact path="/" component={HomePage} />
           <Route path="/shop" component={ShopPage} />
@@ -65,7 +82,12 @@ class App extends React.Component {
   }
 }
 
-export default App;
+//El segundo argumento de connect es MapdispatchToProps
+const mapdispatchToProps = (dispatch) => ({
+  setCurrentUser: (user) => dispatch(setCurrentUser(user)),
+});
+
+export default connect(null, mapdispatchToProps)(App);
 
 /////////////////////////////////////////
 /////////////////////////////////////////
@@ -103,3 +125,21 @@ export default App;
 //? Un query es básicamente pedir por un dato en la database, lo de arriba es un query
 //? Firebase nos puede regresar dos tipos de objetos, un QueryReference: que no nos da la data verdadera sino las propiedades que nos dicen los tellades sobre ello.
 //? Hay maneras de pedir por esta referencia, ver el pdf de la leccion 13.1/carp 7, pero los crud se hacen desde la referencia del documento, para todo lo CRUD se usa el documenRef object.
+
+//! Redux
+//? redux es una libreria que hace es manejo del state mucho más fácil y ordenado.
+//?Es bueno para el manejo de states muy grandes, cuando la aplicacion se vuelve muy grande
+//? Util para compartir data entre componentes
+//?Tiene tres principoios fundamentales
+//*1)Una sola fuente de verdad (básicamente un solo objeto inmenso donde se almacena todo el state de la aplicación)
+//*2) El estado solo es para leer, es inmutable
+//*3) Cambios solo usando funciones puras.
+
+//?El flujo de redux es : actions ==> root reducer ==> store ==> DOM changes
+
+//? Las acciones pueden ser cualquier interaccion con la pagina
+//? Los reducer son observadores, funciones qeu toman un estado y una accion, que dependiendo de cual sea se pasará al store para que actualice el dom
+
+//? pasos, alamceno todo en el elemento provider, en el index.js, escribo el root-reducer, escribo el reducer y los combino en el rootreducer, estore estando alli seteo los middleware e importo el root-reducer. Una vez hecho eso debo exportar el store y pasarselo a provider, en el index.js. Ahora creo la accion que es la que disparará el reducer, son acciones que regresan objects.
+//? Luego de hacer eso en el componente que le quiero pasar los datos importo la funcion connect y meto en componente alli y lo exporto
+//?Ahora para pasar los datos importo connect a app.js, pero esta vez uso el segundo argumento del metodo, y el primer argumento lo pongo nulo.
