@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.css";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 
 //React redux
 import { connect } from "react-redux";
@@ -29,14 +29,14 @@ class App extends React.Component {
   componentDidMount() {
     const { setCurrentUser } = this.props;
 
-    //Este metodo es un observador el cual recibe informacion de firebase, diciendole si el usuario tiene la secion iniciada
+    //Este metodo es un observador el cual recibe informacion de firebase, diciendole si el usuario tiene la sesion iniciada
     //
 
     this.unsubscribeFromAuth = auth.onAuthStateChanged(async (userAuth) => {
       if (userAuth) {
         const userRef = await createUserProfileDocument(userAuth);
 
-        //Este metodo me dice si se ha actualizado la base de datos del documento referencia, normalmente no se actualiz pero me da un snapshot que puedo añadir a mi estado de usuario this.state.currentUser
+        //Este metodo me dice si se ha actualizado la base de datos del documento referencia, normalmente no se actualiza pero me da un snapshot que puedo añadir a mi estado de usuario this.state.currentUser
         userRef.onSnapshot((snapShot) => {
           //los snapshots tienen un metodo llamado data, que de da un objeto con las propiedades que yo definí para el mismo, sin embargo no me da el id
           /*
@@ -49,8 +49,6 @@ class App extends React.Component {
             id: snapShot.id,
             ...snapShot.data(),
           });
-
-          //console.log(this.state);
         });
       } else {
         //this.setState({ currentUser: userAuth });
@@ -60,7 +58,7 @@ class App extends React.Component {
       //createUserProfileDocument(user);
 
       //this.setState({ currentUser: user });
-      //console.log(user);
+      //console.log(this.props);
     });
   }
 
@@ -75,19 +73,34 @@ class App extends React.Component {
         <Switch>
           <Route exact path="/" component={HomePage} />
           <Route path="/shop" component={ShopPage} />
-          <Route path="/signin" component={SignInSignUpPage} />
+          <Route
+            exact
+            path="/signin"
+            render={() =>
+              this.props.currentUser ? (
+                <Redirect to="/" />
+              ) : (
+                <SignInSignUpPage />
+              )
+            }
+          />
         </Switch>
       </div>
     );
   }
 }
 
-//El segundo argumento de connect es MapdispatchToProps
+//Esto trae el objeto del userReducer
+const mapStateToProps = ({ user }) => ({
+  currentUser: user.currentUser,
+});
+
+//El segundo argumento de connect es MapdispatchToProps, lo que hace es pasar las acciones al prop de la clase app, así que ahora tendrá como prop la funcion setCurrentUser, que es la acción
 const mapdispatchToProps = (dispatch) => ({
   setCurrentUser: (user) => dispatch(setCurrentUser(user)),
 });
 
-export default connect(null, mapdispatchToProps)(App);
+export default connect(mapStateToProps, mapdispatchToProps)(App);
 
 /////////////////////////////////////////
 /////////////////////////////////////////
