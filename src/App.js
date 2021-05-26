@@ -5,14 +5,23 @@ import { Switch, Route, Redirect } from "react-router-dom";
 //React redux
 import { connect } from "react-redux";
 
+import { createStructuredSelector } from "reselect";
+
+//Pages
 import HomePage from "./pages/homepage/homepage.component";
 import ShopPage from "./pages/shopage/shop.component";
 import SignInSignUpPage from "./pages/sign-in-up/sign-in-up.component";
+import CheckoutPage from "./pages/checkout/checkout.component";
+
 import Header from "./components/header/header.component";
+
 import { auth, createUserProfileDocument } from "./firebase/firebase.utils";
 
 //Importando la accion
 import { setCurrentUser } from "./redux/user/user.actions";
+
+//Importando selectors
+import { selectCurrentUser } from "./redux/user/user.selectors";
 
 class App extends React.Component {
   /*
@@ -73,6 +82,7 @@ class App extends React.Component {
         <Switch>
           <Route exact path="/" component={HomePage} />
           <Route path="/shop" component={ShopPage} />
+          <Route exact path="/checkout" component={CheckoutPage} />
           <Route
             exact
             path="/signin"
@@ -91,8 +101,14 @@ class App extends React.Component {
 }
 
 //Esto trae el objeto del userReducer
+/*
 const mapStateToProps = ({ user }) => ({
   currentUser: user.currentUser,
+});
+*/
+
+const mapStateToProps = createStructuredSelector({
+  currentUser: selectCurrentUser,
 });
 
 //El segundo argumento de connect es MapdispatchToProps, lo que hace es pasar las acciones al prop de la clase app, así que ahora tendrá como prop la funcion setCurrentUser, que es la acción
@@ -156,7 +172,18 @@ export default connect(mapStateToProps, mapdispatchToProps)(App);
 //? pasos, alamceno todo en el elemento provider, en el index.js, escribo el root-reducer, escribo el reducer y los combino en el rootreducer, estore estando alli seteo los middleware e importo el root-reducer. Una vez hecho eso debo exportar el store y pasarselo a provider, en el index.js. Ahora creo la accion que es la que disparará el reducer, son acciones que regresan objects.
 //? Luego de hacer eso en el componente que le quiero pasar los datos importo la funcion connect y meto en componente alli y lo exporto
 //?Ahora para pasar los datos importo connect a app.js, pero esta vez uso el segundo argumento del metodo, y el primer argumento lo pongo nulo.
+//? si no se especifica el segundo argumento a connect el asumirá que es la función (dispatch), y la pasará al state, por lo tanto si solo necesito importar una accion puedo usar lo de esa manera
+//*componente({dispatch}){}
+//*onClick={()=> dispatch(toggleCartHidden())}
 
 //*SELECTORS A “selector” is simply a function that accepts Redux state as an argument and returns data that is derived from that state. Por lo tanto, como computan nueva data que pasan al componente este simepre se render de nuevo, lo que no es bueno para la optimizacion de la aplicacion.
 
 //? RESELECTORS para que poder usar el mapStateToProps en varios componentes usamos una libreria llamada "reselect", la cual tiene el método CreateSelector, hace que los selectors no reendericen el componente cada vez que se actualiza el estate y el valor de estos no cambia.
+
+//? También tiene el método "createStructuredSelector" el cual usado dentro de una función "mapStateToProps" le pasa automáticamente el estate al cada selector.
+//*const mapStateToProps = createStructuredSelector({
+//*  currentUser: selectCurrentUser,
+//*  hidden: selectCartHidden,
+//*});
+
+//? Usar reselect es una buena práctica y es la manera más común de trabajar cuando se usa React Redux
