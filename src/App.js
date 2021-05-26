@@ -156,3 +156,7 @@ export default connect(mapStateToProps, mapdispatchToProps)(App);
 //? pasos, alamceno todo en el elemento provider, en el index.js, escribo el root-reducer, escribo el reducer y los combino en el rootreducer, estore estando alli seteo los middleware e importo el root-reducer. Una vez hecho eso debo exportar el store y pasarselo a provider, en el index.js. Ahora creo la accion que es la que disparará el reducer, son acciones que regresan objects.
 //? Luego de hacer eso en el componente que le quiero pasar los datos importo la funcion connect y meto en componente alli y lo exporto
 //?Ahora para pasar los datos importo connect a app.js, pero esta vez uso el segundo argumento del metodo, y el primer argumento lo pongo nulo.
+
+//*SELECTORS A “selector” is simply a function that accepts Redux state as an argument and returns data that is derived from that state. Por lo tanto, como computan nueva data que pasan al componente este simepre se render de nuevo, lo que no es bueno para la optimizacion de la aplicacion.
+
+//? RESELECTORS para que poder usar el mapStateToProps en varios componentes usamos una libreria llamada "reselect", la cual tiene el método CreateSelector, hace que los selectors no reendericen el componente cada vez que se actualiza el estate y el valor de estos no cambia.
