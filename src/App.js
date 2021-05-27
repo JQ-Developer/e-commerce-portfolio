@@ -187,3 +187,9 @@ export default connect(mapStateToProps, mapdispatchToProps)(App);
 //*});
 
 //? Usar reselect es una buena práctica y es la manera más común de trabajar cuando se usa React Redux
+
+//! REDUX PERSIST
+//? Redux persist es una libreria que me permite guardar el Redux en el local storage sin tanto problema, para instalarla solo pongo en el terminal "yarn add redux-persist" y la instalo en donde esta el storage
+//? Para usarlo decalro en el store que requiero usarlo y tambien en el root-reducer, mirar los archivos para más informacion.
+//? finalmente en el index.js importo el persisGate y el persistore para envolver al componente principal que en este caso es app.js,debo ponerla directamente fuera de la app pero dentro del router y del store, para que ella pueda acceder al state justo antes de que se refresque la pag.
+//? Lo genial de esto es que me deja poner cuales reducer quiero poner en el local storage, y además las puedo añadir de manera muy fácil!

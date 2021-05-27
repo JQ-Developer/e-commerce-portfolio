@@ -1,5 +1,8 @@
 import { createStore, applyMiddleware } from "redux";
 
+//Persist store para guardar el state general en el navegador
+import { persistStore } from "redux-persist";
+
 //Esto es para loggear cada una de las acciones cuando pasan por el middleware, sirve para debuggear.
 import logger from "redux-logger";
 
@@ -13,6 +16,10 @@ const middlewares = [logger];
 
 //Ahora para crear la store debo llamar esta funcion que cre el store y tiene como argumentos el rootReducer y los middleware (array)
 
-const store = createStore(rootReducer, applyMiddleware(...middlewares));
+export const store = createStore(rootReducer, applyMiddleware(...middlewares));
 
-export default store;
+//Para llamar la persistStore debo exportar la store y luego declarar lo siguiente
+//No necesariamente debo exportar el valor de arriba y el de abajo OJO
+export const persistor = persistStore(store);
+
+export default { store, persistor };
