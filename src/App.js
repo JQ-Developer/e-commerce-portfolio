@@ -193,3 +193,10 @@ export default connect(mapStateToProps, mapdispatchToProps)(App);
 //? Para usarlo decalro en el store que requiero usarlo y tambien en el root-reducer, mirar los archivos para más informacion.
 //? finalmente en el index.js importo el persisGate y el persistore para envolver al componente principal que en este caso es app.js,debo ponerla directamente fuera de la app pero dentro del router y del store, para que ella pueda acceder al state justo antes de que se refresque la pag.
 //? Lo genial de esto es que me deja poner cuales reducer quiero poner en el local storage, y además las puedo añadir de manera muy fácil!
+
+//! Stripe
+//? Estripe es una plataforma que permite los pagos en internet, para usarla creo una cuanta en su página y creo la librería en el proyecto con "yarn add stripe-react-checkout"
+//? Lo que esa librería permite es que pueda añadir una boton para activar la ventana emergente de pagos, para eso creo el componente stripe, pero antes de eso debo agarrar la publishable Key desde la página, en la perstaña para desarrolladores.
+//? En el repositoria de React-Stripe esta toda la informacion sobre las cosas que se le puden añadir a al voton y la ventana emergente que se usa para el pago.
+//? La página dá una tarjeta de crédito de prueba donde se pueden testear como sería un pago en la vida real.
+//? Para estilizar el boton se usa el elmento 'button' en css, ya que react reconoce al boton como un boton aunque no se llame de esa manera en el componente creado.
