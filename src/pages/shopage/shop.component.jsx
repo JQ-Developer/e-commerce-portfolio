@@ -1,4 +1,7 @@
 import React from "react";
+
+import { Route } from "react-router-dom";
+
 //import { connect } from "react-redux";
 //import { createStructuredSelector } from "reselect";
 //import SHOP_DATA from "./shop.data";
@@ -9,7 +12,10 @@ import React from "react";
 
 import CollectionsOverview from "../../components/collections-overview/collections-overview.component";
 
-const ShopPage = ({ collections }) => (
+import CollectionPage from "../collection/collection.component";
+
+//Como shopage esta siendo llamada desde App.js con router eso le da acceso a match history etc
+const ShopPage = ({ match }) => (
   /*
   constructor(props) {
     super(props);
@@ -21,7 +27,9 @@ const ShopPage = ({ collections }) => (
   */
 
   <div className="shop-page">
-    <CollectionsOverview />
+    <Route exact path={`${match.path}`} component={CollectionsOverview} />
+
+    <Route path={`${match.path}/:collectionId`} component={CollectionPage} />
   </div>
 );
 
