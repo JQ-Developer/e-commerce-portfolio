@@ -203,4 +203,4 @@ export default connect(mapStateToProps, mapdispatchToProps)(App);
 
 //! HEROKU
 //? Heroku es como vercel pero mejor, permite proyectos con backend, además tiene el programa de terminal heroku-cli, el cual se instala en linux y en cualquier sistema operativo.
-//? Para subir un proyecto a Heroku es muy sencillo, primero logeo en mi cuenta con "heroku login" segundo hago el proyecto con "heroku create project-name --buidpack https://github.com/mars/create-react-app-buildpack.git" para que cree el app con react, luego "git push heroku main"
+//? Para subir un proyecto a Heroku es muy sencillo, primero logeo en mi cuenta con "heroku login" segundo hago el proyecto con "heroku create project-name --buidpack https://github.com/mars/create-react-app-buildpack.git" para que cree el app con react, luego "git push heroku main" Para actualizar los datos en heroku ;git add, commit, y git push heroku main

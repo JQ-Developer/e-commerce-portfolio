@@ -9,7 +9,11 @@ import logger from "redux-logger";
 import rootReducer from "./root-reducer";
 
 //Setting the middleware
-const middlewares = [logger];
+const middlewares = [];
+
+if (process.env.NODE_ENV === "development") {
+  middlewares.push(logger);
+}
 //
 
 // El middleware que store espera es un array, por eso lo paso a un array, la info que arroje logger.
