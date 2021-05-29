@@ -200,3 +200,7 @@ export default connect(mapStateToProps, mapdispatchToProps)(App);
 //? En el repositoria de React-Stripe esta toda la informacion sobre las cosas que se le puden añadir a al voton y la ventana emergente que se usa para el pago.
 //? La página dá una tarjeta de crédito de prueba donde se pueden testear como sería un pago en la vida real.
 //? Para estilizar el boton se usa el elmento 'button' en css, ya que react reconoce al boton como un boton aunque no se llame de esa manera en el componente creado.
+
+//! HEROKU
+//? Heroku es como vercel pero mejor, permite proyectos con backend, además tiene el programa de terminal heroku-cli, el cual se instala en linux y en cualquier sistema operativo.
+//? Para subir un proyecto a Heroku es muy sencillo, primero logeo en mi cuenta con "heroku login" segundo hago el proyecto con "heroku create project-name --buidpack https://github.com/mars/create-react-app-buildpack.git" para que cree el app con react, luego "git push heroku main"
