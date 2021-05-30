@@ -11,6 +11,7 @@ import rootReducer from "./root-reducer";
 //Setting the middleware
 const middlewares = [];
 
+//esta variable puede ser development , production o test, cuando sehace yarn buid cambia el servidor a production
 if (process.env.NODE_ENV === "development") {
   middlewares.push(logger);
 }

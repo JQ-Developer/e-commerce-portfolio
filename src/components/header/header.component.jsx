@@ -1,4 +1,6 @@
-import { Link } from "react-router-dom";
+//Ya no necesito importar Link aquí ya que lo estoy haciendo en el styled header, solo necesito pasarle los props necesarios, ejm el "to"
+
+//import { Link } from "react-router-dom";
 
 //Redux, trayendo los datos para el currentUser directo desde la base central, no de app.js, connect es un componente de orden superior.
 import { connect } from "react-redux";
@@ -11,35 +13,35 @@ import { selectCartHidden } from "../../redux/cart/cart.selectors";
 import { selectCurrentUser } from "../../redux/user/user.selectors";
 
 import { ReactComponent as Logo } from "../../assets/crown.svg";
-import "./header.styles.scss";
+
+import {
+  HeaderContainer,
+  LogoContainer,
+  OptionsContainer,
+  OptionLink,
+} from "./header.styles";
 
 const Header = ({ currentUser, hidden }) => (
-  <div className="header">
-    <Link className="logo-container" to="/">
+  <HeaderContainer>
+    <LogoContainer to="/">
       <Logo className="logo" />
-    </Link>
+    </LogoContainer>
 
-    <div className="options">
-      <Link className="option" to="/shop">
-        SHOP
-      </Link>
-      <Link className="option" to="/shop">
-        CONTACT
-      </Link>
+    <OptionsContainer>
+      <OptionLink to="/shop">SHOP</OptionLink>
+      <OptionLink to="/shop">CONTACT</OptionLink>
       {currentUser ? (
         //auth.signOut es un metodo que provee auth
-        <div className="option" onClick={() => auth.signOut()}>
+        <OptionLink as="div" onClick={() => auth.signOut()}>
           SIGN OUT
-        </div>
+        </OptionLink>
       ) : (
-        <Link className="option" to="/signin">
-          SIGN IN
-        </Link>
+        <OptionLink to="/signin">SIGN IN</OptionLink>
       )}
       <CartIcon />
-    </div>
+    </OptionsContainer>
     {hidden ? null : <CartDropdown />}
-  </div>
+  </HeaderContainer>
 );
 
 //connect es una funcion que toma dos argumentos, uno con el state que necesita el componente con el componente, para ello creo un afuncion que mapee las propiedades que necesita el componente y se la paso al metodo connect directamente desde el RootReducer.
