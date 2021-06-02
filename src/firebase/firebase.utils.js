@@ -48,7 +48,45 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
   //console.log(snapShot);
 };
 
+//To add itemes into firestone
+export const addCollectionAndDocuments = async (
+  collectionKey,
+  objectsToAdd
+) => {
+  const collectionRef = firestore.collection(collectionKey);
+
+  //batch manda todas las peticiones en una sola, para que hay más control
+  const batch = firestore.batch();
+  objectsToAdd.forEach((obj) => {
+    //doc() creo un id para un documento que se ecuentre en ese query, si no le pongo nada adentro el creara una id random
+    const newDocRef = collectionRef.doc();
+    batch.set(newDocRef, obj);
+  });
+
+  //Esta promesa dispara la carga de todos los archivos al backend
+  return await batch.commit();
+};
 //
+
+export const convertCollectonsSnapshotToMap = (collections) => {
+  const transformedCollection = collections.docs.map((doc) => {
+    const { title, items } = doc.data();
+
+    return {
+      //encripta cualquier string que se le pase para que se pueda poner de url
+      routeName: encodeURI(title.toLowerCase()),
+      id: doc.id,
+      title,
+      items,
+    };
+  });
+
+  //Este método convierte el array en un objeto normalizado
+  return transformedCollection.reduce((accumulator, collection) => {
+    accumulator[collection.title.toLowerCase()] = collection;
+    return accumulator;
+  }, {});
+};
 
 firebase.initializeApp(config);
 

@@ -15,13 +15,18 @@ import CheckoutPage from "./pages/checkout/checkout.component";
 
 import Header from "./components/header/header.component";
 
-import { auth, createUserProfileDocument } from "./firebase/firebase.utils";
+import {
+  auth,
+  createUserProfileDocument,
+  /*addCollectionAndDocuments,*/
+} from "./firebase/firebase.utils";
 
 //Importando la accion
 import { setCurrentUser } from "./redux/user/user.actions";
 
 //Importando selectors
 import { selectCurrentUser } from "./redux/user/user.selectors";
+//import { selectCollectionsForPreview } from "./redux/shop/shop.selector";
 
 class App extends React.Component {
   /*
@@ -36,7 +41,7 @@ class App extends React.Component {
   unsubscribeFromAuth = null;
 
   componentDidMount() {
-    const { setCurrentUser } = this.props;
+    const { setCurrentUser /*collectionsArray*/ } = this.props;
 
     //Este metodo es un observador el cual recibe informacion de firebase, diciendole si el usuario tiene la sesion iniciada
     //
@@ -45,7 +50,7 @@ class App extends React.Component {
       if (userAuth) {
         const userRef = await createUserProfileDocument(userAuth);
 
-        //Este metodo me dice si se ha actualizado la base de datos del documento referencia, normalmente no se actualiza pero me da un snapshot que puedo añadir a mi estado de usuario this.state.currentUser
+        //Este metodo me dice si se ha actualizado la base de datos del documento referencia, normalmente no se actualiza pero me da un snapshot que puedo añadir a mi estado de usuario this.state.currentUser, también me manda un snapshot del momento en el que se crea la app, cuando carga por pñrimera vez, y nos regresa ese snapshot
         userRef.onSnapshot((snapShot) => {
           //los snapshots tienen un metodo llamado data, que de da un objeto con las propiedades que yo definí para el mismo, sin embargo no me da el id
           /*
@@ -64,6 +69,10 @@ class App extends React.Component {
         setCurrentUser(userAuth);
       }
 
+      /*addCollectionAndDocuments(
+        "collections",
+        collectionsArray.map(({ title, items }) => ({ title, items }))
+      );*/
       //createUserProfileDocument(user);
 
       //this.setState({ currentUser: user });
@@ -109,6 +118,7 @@ const mapStateToProps = ({ user }) => ({
 
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser,
+  /*collectionsArray: selectCollectionsForPreview,*/
 });
 
 //El segundo argumento de connect es MapdispatchToProps, lo que hace es pasar las acciones al prop de la clase app, así que ahora tendrá como prop la funcion setCurrentUser, que es la acción
