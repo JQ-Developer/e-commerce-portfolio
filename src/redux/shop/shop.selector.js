@@ -1,15 +1,5 @@
 import { createSelector } from "reselect";
 
-/*
-const COLLECTION_ID_MAP = {
-  hats: 1,
-  sneakers: 2,
-  jackets: 3,
-  womens: 4,
-  mens: 5,
-};
-*/
-
 const selectShop = (state) => state.shop;
 
 export const selectCollections = createSelector(
@@ -26,19 +16,21 @@ export const selectCollectionsForPreview = createSelector(
 
 //Este selector lo que hace es encontrar la collection que queremos dentro de las collections basandose en la url del paramatro que le introduciomos y encontrandolo mediante el mapa de arriba
 //Básicamente estamos haciendo currying
+
 export const selectCollection = (collectionUrlParam) =>
   createSelector([selectCollections], (collections) =>
-    //
-    //Lo que voy a hacer es comentar este mapeo ya que es más sendillo convertir el array de shop-data en un objeto al que se le asigna un id por cada collection y de ahí lo encontramos basandonos en el matchUrl. Así que ya no tengo que usar el mapa de arriba kekaso
-    //A esto se le llama normalization of data
-    /*
+    collections ? collections[collectionUrlParam] : null
+  );
+
+//
+//Lo que voy a hacer es comentar este mapeo ya que es más sendillo convertir el array de shop-data en un objeto al que se le asigna un id por cada collection y de ahí lo encontramos basandonos en el matchUrl. Así que ya no tengo que usar el mapa de arriba kekaso
+//A esto se le llama normalization of data
+/*
     collections.find(
       (collections) => collections.id === COLLECTION_ID_MAP[collectionUrlParam]
     )
     */
-    //
-    collections ? collections[collectionUrlParam] : null
-  );
+//
 
 export const selectIsCollectionFetching = createSelector(
   [selectShop],

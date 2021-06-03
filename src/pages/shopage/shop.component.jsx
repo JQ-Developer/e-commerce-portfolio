@@ -4,6 +4,13 @@ import { Route } from "react-router-dom";
 
 import { connect } from "react-redux";
 
+//*
+import {
+  firestore,
+  convertCollectonsSnapshotToMap,
+} from "../../firebase/firebase.utils";
+//*
+
 //Action
 import { fetchCollectionsStartAsync } from "../../redux/shop/shop.actions";
 import {
@@ -33,6 +40,13 @@ class ShopPage extends React.Component {
 
     const { fetchCollectionsStartAsync } = this.props;
     fetchCollectionsStartAsync();
+
+    /*
+    firestore
+      .collection("collections")
+      .get()
+      .then((snapshot) => console.log(snapshot));
+    */
   }
 
   render() {
