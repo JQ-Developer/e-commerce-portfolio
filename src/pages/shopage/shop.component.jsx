@@ -4,55 +4,21 @@ import { Route } from "react-router-dom";
 
 import { connect } from "react-redux";
 
-//import { connect } from "react-redux";
-//import { createStructuredSelector } from "reselect";
-//import SHOP_DATA from "./shop.data";
-
-//import CollectionPreview from "../../components/collection-preview/collection-preview.component";
-
-//import { selectCollections } from "../../redux/shop/shop.selector";
-
-import CollectionsOverview from "../../components/collections-overview/collections-overview.component";
-
-import CollectionPage from "../collection/collection.component";
-
-//firestore
-import {
-  firestore,
-  convertCollectonsSnapshotToMap,
-} from "../../firebase/firebase.utils";
-
 //Action
-import { updateCollections } from "../../redux/shop/shop.actions";
+import { fetchCollectionsStartAsync } from "../../redux/shop/shop.actions";
+import {
+  selectIsCollectionFetching,
+  selectIsCollectionsLoaded,
+} from "../../redux/shop/shop.selector";
 
-import WithSpinner from "../../components/with-spinner/with-spinner.component";
+import CollectionsOverviewContainer from "../../components/collections-overview/collections-overview.container";
+
+import CollectionPageContainer from "../collection/collection.container";
 
 //Como shopage esta siendo llamada desde App.js con router eso le da acceso a match history etc
 
-const CollectionsOverviewWithSpinner = WithSpinner(CollectionsOverview);
-const CollectionPageWithSpinner = WithSpinner(CollectionPage);
-
 class ShopPage extends React.Component {
-  /*
-  constructor() {
-    super();
-
-    this.state = {
-      loading: true,
-    };
-  }
-  */
-
-  state = {
-    loading: true,
-  };
-
-  unsubscribeFromSnapshot = null;
-
   componentDidMount() {
-    const { updateCollections } = this.props;
-    const collectionRef = firestore.collection("collections");
-
     //Comentando esta parte para probar como sería con una API normal, usando promesas.
     /*
     this.unsubscribeFromSnapshot = collectionRef.onSnapshot(
@@ -63,31 +29,40 @@ class ShopPage extends React.Component {
       }
     );
     */
-    collectionRef.get().then((snapshot) => {
-      const collectionsMap = convertCollectonsSnapshotToMap(snapshot);
-      updateCollections(collectionsMap);
-      this.setState({ loading: false });
-    });
+    //Ahora que estoy usando redux-thunk ya no es necesario este codigo aqui, así que la version de promesas la pasé al shop.actions.js.
+
+    const { fetchCollectionsStartAsync } = this.props;
+    fetchCollectionsStartAsync();
   }
 
   render() {
     const { match } = this.props;
-    const { loading } = this.state;
 
     return (
       <div className="shop-page">
         <Route
           exact
           path={`${match.path}`}
+          /*
+          Esto es para cuando no estamos usando el patron container para elementos de alto orden
           render={(props) => (
-            <CollectionsOverviewWithSpinner isLoading={loading} {...props} />
+            <CollectionsOverviewWithSpinner
+              isLoading={isCollectionFetching}
+              {...props}
+            />
           )}
+          */
+          component={CollectionsOverviewContainer}
         />
         <Route
           path={`${match.path}/:collectionId`}
+          /*
           render={(props) => (
-            <CollectionPageWithSpinner isLoading={loading} {...props} />
-          )}
+            <CollectionPageWithSpinner
+              isLoading={!selectIsCollectionsLoaded}
+              {...props}
+              */
+          component={CollectionPageContainer}
         />
       </div>
     );
@@ -95,8 +70,7 @@ class ShopPage extends React.Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  updateCollections: (collectionsMap) =>
-    dispatch(updateCollections(collectionsMap)),
+  fetchCollectionsStartAsync: () => dispatch(fetchCollectionsStartAsync()),
 });
 
 export default connect(null, mapDispatchToProps)(ShopPage);

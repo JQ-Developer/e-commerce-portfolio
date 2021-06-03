@@ -1,5 +1,7 @@
 import { createStore, applyMiddleware } from "redux";
 
+import thunk from "redux-thunk";
+
 //Persist store para guardar el state general en el navegador
 import { persistStore } from "redux-persist";
 
@@ -9,7 +11,7 @@ import logger from "redux-logger";
 import rootReducer from "./root-reducer";
 
 //Setting the middleware
-const middlewares = [];
+const middlewares = [thunk];
 
 //esta variable puede ser development , production o test, cuando sehace yarn buid cambia el servidor a production
 if (process.env.NODE_ENV === "development") {
