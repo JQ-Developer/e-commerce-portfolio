@@ -4,19 +4,8 @@ import { Route } from "react-router-dom";
 
 import { connect } from "react-redux";
 
-//*
-import {
-  firestore,
-  convertCollectonsSnapshotToMap,
-} from "../../firebase/firebase.utils";
-//*
-
 //Action
 import { fetchCollectionsStartAsync } from "../../redux/shop/shop.actions";
-import {
-  selectIsCollectionFetching,
-  selectIsCollectionsLoaded,
-} from "../../redux/shop/shop.selector";
 
 import CollectionsOverviewContainer from "../../components/collections-overview/collections-overview.container";
 
@@ -40,13 +29,6 @@ class ShopPage extends React.Component {
 
     const { fetchCollectionsStartAsync } = this.props;
     fetchCollectionsStartAsync();
-
-    /*
-    firestore
-      .collection("collections")
-      .get()
-      .then((snapshot) => console.log(snapshot));
-    */
   }
 
   render() {
