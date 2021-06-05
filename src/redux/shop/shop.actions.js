@@ -27,6 +27,7 @@ export const fetchCollectionsFailure = (errorMessage) => ({
 });
 
 //THUNK, que me permite despachar funciones en lugar de solo acciones, que son objetos, y así añadirle más lógica al código. Básicamente una funcion que regresa una función que puede acceder al Dispatch.
+
 export const fetchCollectionsStartAsync = () => {
   return (dispatch) => {
     const collectionRef = firestore.collection("collections");

@@ -4,31 +4,17 @@ import { Route } from "react-router-dom";
 
 import { connect } from "react-redux";
 
-//Action
-import { fetchCollectionsStartAsync } from "../../redux/shop/shop.actions";
+//saga
+import { fetchCollectionsStart } from "../../redux/shop/shop.actions";
 
 import CollectionsOverviewContainer from "../../components/collections-overview/collections-overview.container";
 
 import CollectionPageContainer from "../collection/collection.container";
 
-//Como shopage esta siendo llamada desde App.js con router eso le da acceso a match history etc
-
 class ShopPage extends React.Component {
   componentDidMount() {
-    //Comentando esta parte para probar como sería con una API normal, usando promesas.
-    /*
-    this.unsubscribeFromSnapshot = collectionRef.onSnapshot(
-      async (snapshot) => {
-        const collectionsMap = convertCollectonsSnapshotToMap(snapshot);
-        updateCollections(collectionsMap);
-        this.setState({ loading: false });
-      }
-    );
-    */
-    //Ahora que estoy usando redux-thunk ya no es necesario este codigo aqui, así que la version de promesas la pasé al shop.actions.js.
-
-    const { fetchCollectionsStartAsync } = this.props;
-    fetchCollectionsStartAsync();
+    const { fetchCollectionsStart } = this.props;
+    fetchCollectionsStart();
   }
 
   render() {
@@ -52,12 +38,6 @@ class ShopPage extends React.Component {
         />
         <Route
           path={`${match.path}/:collectionId`}
-          /*
-          render={(props) => (
-            <CollectionPageWithSpinner
-              isLoading={!selectIsCollectionsLoaded}
-              {...props}
-              */
           component={CollectionPageContainer}
         />
       </div>
@@ -66,7 +46,7 @@ class ShopPage extends React.Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  fetchCollectionsStartAsync: () => dispatch(fetchCollectionsStartAsync()),
+  fetchCollectionsStart: () => dispatch(fetchCollectionsStart()),
 });
 
 export default connect(null, mapDispatchToProps)(ShopPage);
