@@ -20,6 +20,17 @@ export const emailSignInStart = (emailAndPassword) => ({
   payload: emailAndPassword,
 });
 
+//sign up
+export const signUpStart = (signUpData) => ({
+  type: UserActionTypes.SIGN_UP_START,
+  payload: signUpData,
+});
+
+export const signUpFailure = (error) => ({
+  type: UserActionTypes.SIGN_UP_FAILURE,
+  payload: error,
+});
+
 //Persistence of session
 export const checkUserSession = () => ({
   type: UserActionTypes.CHECK_USER_SESSION,

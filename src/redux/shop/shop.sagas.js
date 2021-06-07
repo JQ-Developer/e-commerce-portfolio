@@ -2,7 +2,7 @@
 //call es para llamar funciones, tecnicamente no es necesario pero es útil , y una buena práctica.
 //put Creates an Effect description that instructs the middleware to dispatch an action to the Store, básicamente se usa para despachar acciones.
 
-import { takeLatest, call, put } from "redux-saga/effects";
+import { takeLatest, call, put, all } from "redux-saga/effects";
 
 //Importando las utilidades necesarias desde firebase
 import {
@@ -40,4 +40,8 @@ export function* fetchCollectionsStart() {
     ShopActionTypes.FETCH_COLLECTIONS_START,
     fetchCollectionsAsync
   );
+}
+
+export function* shopSagas() {
+  yield all([call(fetchCollectionsStart)]);
 }

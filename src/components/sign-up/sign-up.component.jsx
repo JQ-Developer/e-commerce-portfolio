@@ -1,9 +1,12 @@
 import { Component } from "react";
 
+import { connect } from "react-redux";
+
 import FormInput from "../form-input/form-input.component";
 import CustomButton from "../custom-button/custom-button.component";
 
 import { auth, createUserProfileDocument } from "../../firebase/firebase.utils";
+import { signUpStart } from "../../redux/user/user.actions";
 
 import "./sign-up.styles.scss";
 
@@ -22,34 +25,10 @@ class SignUp extends Component {
   handledSubmit = async (event) => {
     event.preventDefault();
 
+    const { signUpStart } = this.props;
     const { displayName, email, password, confirmPassword } = this.state;
 
-    if (password !== confirmPassword) {
-      alert("Passwords do not match");
-      return;
-    }
-
-    try {
-      //Esta funcion crea un objeto con un usuario y contraseña
-      const { user } = await auth.createUserWithEmailAndPassword(
-        email,
-        password
-      );
-
-      await createUserProfileDocument(user, { displayName });
-
-      //This will clear our form
-      this.setState({
-        displayName: "",
-        email: "",
-        password: "",
-        confirmPassword: "",
-      });
-
-      //
-    } catch (error) {
-      console.error(error);
-    }
+    signUpStart(displayName, email, password, confirmPassword);
   };
   handleChange = (event) => {
     const { name, value } = event.target;
@@ -108,6 +87,9 @@ class SignUp extends Component {
   }
 }
 
-//! una vez añadida la opcin de crear una cuenta con correo en firebase debo existe la opcion de confirmación de correo electronico
+const mapDispatchToProps = (dispatch) => ({
+  signUpStart: (displayName, email, password, confirmPassword) =>
+    dispatch(signUpStart({ displayName, email, password, confirmPassword })),
+});
 
-export default SignUp;
+export default connect(null, mapDispatchToProps)(SignUp);

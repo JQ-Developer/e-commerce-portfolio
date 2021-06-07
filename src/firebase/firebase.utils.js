@@ -66,9 +66,7 @@ export const addCollectionAndDocuments = async (
   //Esta promesa dispara la carga de todos los archivos al backend
   return await batch.commit();
 };
-//
 
-//console.log(collections);
 export const convertCollectonsSnapshotToMap = (collections) => {
   const transformedCollection = collections.docs.map((doc) => {
     //console.log(collections);

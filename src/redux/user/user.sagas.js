@@ -7,6 +7,7 @@ import {
   signInFailure,
   signOutSuccess,
   signOutFailure,
+  signUpFailure,
 } from "./user.actions";
 
 import {
@@ -80,6 +81,33 @@ export function* onCheckUserSession() {
   yield takeLatest(UserActionTypes.CHECK_USER_SESSION, isUserAuthenticated);
 }
 
+///////// sign up
+export function* signUp({
+  payload: { displayName, email, password, confirmPassword },
+}) {
+  if (password !== confirmPassword) {
+    alert("Passwords do not match");
+    return;
+  }
+
+  try {
+    //Esta funcion crea un objeto con un usuario y contraseña
+    const { user } = yield auth.createUserWithEmailAndPassword(email, password);
+
+    yield createUserProfileDocument(user, { displayName });
+
+    yield auth.signInWithEmailAndPassword(email, password);
+    yield getSnapshotFromUserAuth(user);
+    //
+  } catch (error) {
+    yield put(signUpFailure(error));
+  }
+}
+
+export function* onSignUp() {
+  yield takeLatest(UserActionTypes.SIGN_UP_START, signUp);
+}
+
 ///////// sign out
 export function* signOut() {
   try {
@@ -101,5 +129,6 @@ export function* userSagas() {
     call(onEmailSignInStart),
     call(onCheckUserSession),
     call(onSignOutStart),
+    call(onSignUp),
   ]);
 }
