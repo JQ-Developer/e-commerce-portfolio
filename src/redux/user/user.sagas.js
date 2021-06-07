@@ -8,6 +8,7 @@ import {
   signOutSuccess,
   signOutFailure,
   signUpFailure,
+  signUpSuccess,
 } from "./user.actions";
 
 import {
@@ -17,10 +18,14 @@ import {
   getCurrentUser,
 } from "../../firebase/firebase.utils";
 
-export function* getSnapshotFromUserAuth(userAuth) {
+export function* getSnapshotFromUserAuth(userAuth, additionalData) {
   try {
     // el segundo argumento de la funcion call es el argumento de la callback
-    const userRef = yield call(createUserProfileDocument, userAuth);
+    const userRef = yield call(
+      createUserProfileDocument,
+      userAuth,
+      additionalData
+    );
     const userSnapshot = yield userRef.get();
 
     yield put(signInSucces({ id: userSnapshot.id, ...userSnapshot.data() }));
@@ -96,16 +101,23 @@ export function* signUp({
 
     yield createUserProfileDocument(user, { displayName });
 
-    yield auth.signInWithEmailAndPassword(email, password);
-    yield getSnapshotFromUserAuth(user);
+    yield put(signUpSuccess({ user, additionalData: { displayName } }));
     //
   } catch (error) {
     yield put(signUpFailure(error));
   }
 }
 
+export function* signInAfterSignUp({ payload: { user, additionalData } }) {
+  yield getSnapshotFromUserAuth(user, additionalData);
+}
+
 export function* onSignUp() {
   yield takeLatest(UserActionTypes.SIGN_UP_START, signUp);
+}
+
+export function* onSignUpSuccess() {
+  yield takeLatest(UserActionTypes.SIGN_UP_SUCCESS, signInAfterSignUp);
 }
 
 ///////// sign out
@@ -130,5 +142,6 @@ export function* userSagas() {
     call(onCheckUserSession),
     call(onSignOutStart),
     call(onSignUp),
+    call(onSignUpSuccess),
   ]);
 }
