@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import { Route } from "react-router-dom";
 
@@ -11,21 +11,17 @@ import CollectionsOverviewContainer from "../../components/collections-overview/
 
 import CollectionPageContainer from "../collection/collection.container";
 
-class ShopPage extends React.Component {
-  componentDidMount() {
-    const { fetchCollectionsStart } = this.props;
+const ShopPage = ({ match, fetchCollectionsStart }) => {
+  useEffect(() => {
     fetchCollectionsStart();
-  }
+  }, [fetchCollectionsStart]);
 
-  render() {
-    const { match } = this.props;
-
-    return (
-      <div className="shop-page">
-        <Route
-          exact
-          path={`${match.path}`}
-          /*
+  return (
+    <div className="shop-page">
+      <Route
+        exact
+        path={`${match.path}`}
+        /*
           Esto es para cuando no estamos usando el patron container para elementos de alto orden
           render={(props) => (
             <CollectionsOverviewWithSpinner
@@ -34,16 +30,15 @@ class ShopPage extends React.Component {
             />
           )}
           */
-          component={CollectionsOverviewContainer}
-        />
-        <Route
-          path={`${match.path}/:collectionId`}
-          component={CollectionPageContainer}
-        />
-      </div>
-    );
-  }
-}
+        component={CollectionsOverviewContainer}
+      />
+      <Route
+        path={`${match.path}/:collectionId`}
+        component={CollectionPageContainer}
+      />
+    </div>
+  );
+};
 
 const mapDispatchToProps = (dispatch) => ({
   fetchCollectionsStart: () => dispatch(fetchCollectionsStart()),
