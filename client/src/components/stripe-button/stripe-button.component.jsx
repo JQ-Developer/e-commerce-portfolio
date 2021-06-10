@@ -1,5 +1,8 @@
 import StripeCheckout from "react-stripe-checkout";
 
+//Axios for http request
+import axios from "axios";
+
 const StripeCheckoutButton = ({ price }) => {
   const priceForStripe = price * 100;
   const publishableKey =
@@ -7,9 +10,26 @@ const StripeCheckoutButton = ({ price }) => {
 
   //El token es lo que se pasa al backend para que procese el pago, pero como no estamos trabajando con backend aquí, solo alertaremos que se hizo efectivo el pago con una alerta, a modo de ejmplo claro está.
   //Tambien consoleamos lo que sea que es el token que se pasa al backend
-  const onToken = (tokken) => {
-    console.log(tokken);
-    alert("Payment Successful");
+  const onToken = (token) => {
+    //returns a promise
+    axios({
+      //route
+      url: "payment",
+      method: "post",
+      data: {
+        amount: priceForStripe,
+        token,
+      },
+    })
+      .then((response) => {
+        alert("Payment Successful");
+      })
+      .catch((error) => {
+        console.log("Payment error: ", JSON.parse(error));
+        alert(
+          "There was an issue with your payment. Please make sure you use the provided credit card."
+        );
+      });
   };
 
   return (
