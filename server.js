@@ -2,6 +2,8 @@ const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const path = require("path");
+//para compresion en heroku
+const compression = require("compression");
 
 //To hide the key
 if (process.env.NODE_ENV !== "production") require("dotenv").config();
@@ -12,6 +14,9 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 //Creating express app
 const app = express();
 const port = process.env.PORT || 5000;
+
+//compression
+app.use(compression());
 
 //Parses the body and converts to json
 app.use(bodyParser.json());
