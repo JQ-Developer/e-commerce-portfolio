@@ -1,3 +1,5 @@
+import { memo } from "react";
+
 import "./cart-item.styles.scss";
 
 //Es lo mismo que decir props.image.price...
@@ -13,4 +15,4 @@ const CartItem = ({ item: { imageUrl, price, name, quantity } }) => (
   </div>
 );
 
-export default CartItem;
+export default memo(CartItem);
