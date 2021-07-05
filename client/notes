@@ -1,0 +1,240 @@
+/////////////////////////////////////////
+/////////////////////////////////////////
+/////////////////////////////////////////
+//? Para instalar sass a un proyecto yarn add node-sass
+
+const { Profiler } = require("react");
+
+//? React tiene un atributo llamado "style={ {} }" el cual tiene un objeto en el cual se pueden poner reglas de css con las que se puede modificar el elemento en el que se invoca
+
+//? Se le pueden añadir mas de una clase a los elemtos, usando la siguiente notacion className = {`primera clase segunda clase ${javaScript pasado en props}`}
+
+//? React router tiene la funcion "Route" la cual toma tres argumentos "component" que es el comoponente que queremos renderizar, "path" es la direccion que debe tener esa pagina. "exact" puede ser true or false, por defecto es true, el cual carga la pagina solo si la direccion en el path es identica a la del navegador.
+//? Tambien tiene el metodo "Switch" el cual reenderiza la primera pagina que matchee con el path si no cargara nada más
+//? Reacr Router toma como props una serie de parametros que pueden ser ùtiles, tales como isExact(que dice si se esta cumpliento la url exactamente) path, url, params, etc
+//? Router tambien nos da acceso a importar el metodo "Link", el cual nos permite creal un lik hacia otra direcction url.
+//? Otra manera de hacer esto es mediante un boton, usando la api "history" de la siguiente manera
+//* button onclick={()=> props.history.push('/topics')}> Topics</button>
+//? Location nos da la direccion de donde estamos
+
+//?Solamente el elemento que se le pone a Router tiene acceso a esa propiedades por lo tanto si quiero obtenerlas debo hacerlas de la manera correcta, no haciendo un tunel entre los componentes(prop drilling).
+//? Imortando "withRouter" nos da acceso a una funcion de orden superior que toma como argumento un componente y le da acceso a los props de los que estuve hablando arriba.
+//?You can get access to the history object’s properties and the closest <Route>'s match via the withRouter higher-order component. withRouter will pass updated match, location, and history props to the wrapped component whenever it renders.
+
+//? Para importar un SVG se usa la palabra "ReactComponent" de la siguinete manera:
+//* import {ReactComponent as Logo} from ...
+
+//! Firebase
+//? Es una base de datos no-sql
+//? Para hacer un crud con inicio de sesion con google hay que escribir codigo pero también hay que configurarlo en firestone autenticación
+//? Las bases de datos en firebase básicamente consisten en colecciones y documentos
+//? La manera de query them es aspi
+//* firebase.firestore().collection('users').doc('idcode').collection(cartItems).doc('idCode')
+//? otra manera es
+//*firestore().doc('users/idcode/cartItems/idCode')
+//Si lo que busco es una collection entoces debo poner collection.
+//? Un query es básicamente pedir por un dato en la database, lo de arriba es un query
+//? Firebase nos puede regresar dos tipos de objetos, un QueryReference: que no nos da la data verdadera sino las propiedades que nos dicen los tellades sobre ello.
+//? Hay maneras de pedir por esta referencia, ver el pdf de la leccion 13.1/carp 7, pero los crud se hacen desde la referencia del documento, para todo lo CRUD se usa el documenRef object.
+
+//! Redux
+//? redux es una libreria que hace es manejo del state mucho más fácil y ordenado.
+//?Es bueno para el manejo de states muy grandes, cuando la aplicacion se vuelve muy grande
+//? Util para compartir data entre componentes
+//?Tiene tres principoios fundamentales
+//*1)Una sola fuente de verdad (básicamente un solo objeto inmenso donde se almacena todo el state de la aplicación)
+//*2) El estado solo es para leer, es inmutable
+//*3) Cambios solo usando funciones puras.
+
+//?El flujo de redux es : actions ==> root reducer ==> store ==> DOM changes
+
+//? Las acciones pueden ser cualquier interaccion con la pagina
+//? Los reducer son observadores, funciones qeu toman un estado y una accion, que dependiendo de cual sea se pasará al store para que actualice el dom
+
+//? pasos, alamceno todo en el elemento provider, en el index.js, escribo el root-reducer, escribo el reducer y los combino en el rootreducer, estore estando alli seteo los middleware e importo el root-reducer. Una vez hecho eso debo exportar el store y pasarselo a provider, en el index.js. Ahora creo la accion que es la que disparará el reducer, son acciones que regresan objects.
+//? Luego de hacer eso en el componente que le quiero pasar los datos importo la funcion connect y meto en componente alli y lo exporto
+//?Ahora para pasar los datos importo connect a app.js, pero esta vez uso el segundo argumento del metodo, y el primer argumento lo pongo nulo.
+//? si no se especifica el segundo argumento a connect el asumirá que es la función (dispatch), y la pasará al state, por lo tanto si solo necesito importar una accion puedo usar lo de esa manera
+//*componente({dispatch}){}
+//*onClick={()=> dispatch(toggleCartHidden())}
+
+//*SELECTORS A “selector” is simply a function that accepts Redux state as an argument and returns data that is derived from that state. Por lo tanto, como computan nueva data que pasan al componente este simepre se render de nuevo, lo que no es bueno para la optimizacion de la aplicacion.
+
+//? RESELECTORS para que poder usar el mapStateToProps en varios componentes usamos una libreria llamada "reselect", la cual tiene el método CreateSelector, hace que los selectors no reendericen el componente cada vez que se actualiza el estate y el valor de estos no cambia.
+
+//? También tiene el método "createStructuredSelector" el cual usado dentro de una función "mapStateToProps" le pasa automáticamente el estate al cada selector.
+//*const mapStateToProps = createStructuredSelector({
+//*  currentUser: selectCurrentUser,
+//*  hidden: selectCartHidden,
+//*});
+
+//? Usar reselect es una buena práctica y es la manera más común de trabajar cuando se usa React Redux
+
+//! REDUX PERSIST
+//? Redux persist es una libreria que me permite guardar el Redux en el local storage sin tanto problema, para instalarla solo pongo en el terminal "yarn add redux-persist" y la instalo en donde esta el storage
+//? Para usarlo decalro en el store que requiero usarlo y tambien en el root-reducer, mirar los archivos para más informacion.
+//? finalmente en el index.js importo el persisGate y el persistore para envolver al componente principal que en este caso es app.js,debo ponerla directamente fuera de la app pero dentro del router y del store, para que ella pueda acceder al state justo antes de que se refresque la pag.
+//? Lo genial de esto es que me deja poner cuales reducer quiero poner en el local storage, y además las puedo añadir de manera muy fácil!
+
+//! Stripe
+//? Estripe es una plataforma que permite los pagos en internet, para usarla creo una cuanta en su página y creo la librería en el proyecto con "yarn add stripe-react-checkout"
+//? Lo que esa librería permite es que pueda añadir una boton para activar la ventana emergente de pagos, para eso creo el componente stripe, pero antes de eso debo agarrar la publishable Key desde la página, en la perstaña para desarrolladores.
+//? En el repositoria de React-Stripe esta toda la informacion sobre las cosas que se le puden añadir a al voton y la ventana emergente que se usa para el pago.
+//? La página dá una tarjeta de crédito de prueba donde se pueden testear como sería un pago en la vida real.
+//? Para estilizar el boton se usa el elmento 'button' en css, ya que react reconoce al boton como un boton aunque no se llame de esa manera en el componente creado.
+
+//! HEROKU
+//? Heroku es como vercel pero mejor, permite proyectos con backend, además tiene el programa de terminal heroku-cli, el cual se instala en linux y en cualquier sistema operativo.
+//? Para subir un proyecto a Heroku es muy sencillo, primero logeo en mi cuenta con "heroku login" segundo hago el proyecto con "heroku create project-name --buidpack https://github.com/mars/create-react-app-buildpack.git" para que cree el app con react, luego "git push heroku main" Para actualizar los datos en heroku ;git add, commit, y git push heroku main
+
+//! Redux thunk
+//? "yarn add redux thunk" es una librería que es un middleware que permite disparar funciones,Redux Thunk middleware allows you to write action creators that return a function instead of an action. The thunk can be used to delay the dispatch of an action, or to dispatch only if a certain condition is met. The inner function receives the store methods dispatch and getState as parameters.
+//? Para usarlo solo tengo que ponerlo en los middlewares
+
+//! REDUX SAGAS
+//? Esta hecho para lidiar con API requests o cualquier funcion que pueda ser impura, cada actividad asyncrona que no este relacionada con los estados componentes pero que pueda estar relacionada con la aplicacion como un todo deberia estar en saga.
+//? "yarn add redux-saga"
+
+//Se importa createSagaMiddleware en store.js
+//creo una variable que ejecuta la funcion createSagaMiddleware() y la paso al array de middlewares
+//Despues de que se ejecute el codigo de applyMiddlewares dentro del createStore llamo la funcion sagaMiddleware.run() y le paso las sagas que quiero que se ejecuten
+//Creo un archivo con las sagas para determinada parte del programa, por ejemplo para el shop creo shop.sagas, esas seran las sagas relaciondas con esta parde de la aplicacion.
+// En el archivo de las sagas hay que importar ciertos efectos que interactúan con las sagas
+//*takeEvery(pattern, saga, ...args)#Spawns a saga on each action dispatched to the Store that matches pattern.{takeEvery} escucha por cada accion de un tipo especifico que le pasamos
+//*put es basicamente una manera de despachar acciones dentro de las sagas, recuerda que put pone las cosas otra vez al flujo de Redux
+//Ahora se escribe la saga, para escribirla se usa el sintaxis del generador (*)
+//Una vez escrita se le pasa al sagaMiddleware.run() que esta en el store, y cuando las acciones se disparen y la saga las capte llamra una orden que es otra saga
+//?Ojo acabo de perder casi dos horas porque pasé la saga como si fuera una acción al componente que la dispara, que es shop.component.jsx
+//*call(fn, ...args)#Creates an Effect description that instructs the middleware to call the function fn with args as arguments.
+//* take simplente espera a que la accion sea disparada y la trata como si fuera una promesa, tenemos la accion de regresar cualquier cosa de ella, su payload, Creates an Effect description that instructs the middleware to wait for a specified action on the Store. The Generator is suspended until an action that matches pattern is dispatched.The result of yield take(pattern) is an action object being dispatched.
+//*delay es la manera de poner setTimeOuts en sagas
+//* takesLatest, cancela cualquier accion asyncrona excepto la ultima, por ejemplo en caso de un delay si lo clickeas muchas  veces solo se resolverá la ultima vez que lo primes, y dejas pasar el tiempo
+//?Ya que si tengo muchas sagas tendría que meterlas todas una por una en el store, creo el root-saga.
+//* all efffect, metemos todas las sagas en un array all([]) sirve para agruparlas y llamaras dentro del root-saga, y que ninguna espera a que la otra termine, todas se realizan al mismo tiempo en diferentes hilos.
+
+//? Voy a refactorizar el codigo de sing-in, para eso cree acciones como google sign in succes y email-sign-in-start, además voy a actualizar el user-reducer para que vaya acorde con estas nuevas acciones. Tamién voy a crear el archov user.sagas.js donde voy a poner todas las sagas con respecto al usuario, ahí creo las sagas necesarias, como iniciar sesion con google, la cual importa las funciones necesarias desde la firebase.utils,  y también paso la accion que dispara la saga al sign-in.compoent.jsx
+//? Para el emailSignIn lo que hice fue meterlo en el mapStateToProps con sus respectivos argumentos, se despacha con esos valores que luego se le pasaran a la accion
+
+//! REACT HOOKS
+//? Intenta reemplazar la manera en que se hacen los componentes.
+//?Es una manera de escribir functional component pero accediendo a funciones de las que solo teniamos accesos en las clases, los hooks solo se pueden usar en functional components.
+//* useState nos da acceso a el state dentro de un functional component. para usarlo "const [variable, modificadorDeLaVariable] = useState('valorInicial')"
+//* Nos da la habilidad de disparar side effects dentro de functional components. useEffect toma dos argumentos, la función que se disparará cada vez que se actualice el state o los props, y un array de las variables que queremos que tengan ese efecto, useEffect(console.log(hello),[cadaVezQueEstaVariabledelStateSeImprimeHello]), si el array esta vacio solo se actualiza cuando se monta.Para hacer una funcion asyncAwait debo definirla dentro de la funcion y llamarla desde adentro. Normalente se usan dentro de componente qe tiene life cycles.
+//? Para mimimcar componentWillUnmount con este método solo tengo que return una funcion, esa funcion será la que limpie la anterior, ejm
+// useEffect(()=>{
+//     console.log('I am subscribing');
+//     const unsubscribingFromComponent = xxxxxx
+//     return ()=> {
+//         console.log('I am unsubscribing');
+//         unsubscribingFromComponent()
+//     }
+// },[])
+//? cheatsheet: A quick recap of what we have learned about useEffect:
+/*
+
+ComponentDidMount
+//Class
+componentDidMount() {
+    console.log('I just mounted!');
+}
+
+//Hooks
+useEffect(() => {
+    console.log('I just mounted!');
+}, [])
+
+
+ComponentWillUnmount
+//Class
+componentWillUnmount() {
+    console.log('I am unmounting');
+}
+
+//Hooks
+useEffect(() => {
+    return () => console.log('I am unmounting');
+}, [])
+
+
+ComponentWillReceiveProps
+//Class
+componentWillReceiveProps(nextProps) {
+    if (nextProps.count !== this.props.count) {
+        console.log('count changed', nextProps.count);
+    }
+}
+
+//Hooks
+useEffect(() => {
+    console.log('count changed', props.count);
+}, [props.count])*/
+
+//? userReducer es una effect que nos deja usar los reducer de una manera minuscula, de manera nativa.
+//?useReducer is usually preferable to useState when you have complex state logic that involves multiple sub-values or when the next state depends on the previous one. useReducer also lets you optimize performance for components that trigger deep updates because you can pass dispatch down instead of callbacks.
+
+//! CREATING BACKEND
+//primero creo una carpeta llamda client donde meto toodo el front, y el backend estará en el root
+//creo otro archivo package.json y meto lo que necesito alli para el back, en el curso ya me dan el archivo con algunos scripts útlies
+//creo .env con la apikey que se tiene que mantener escondida
+//dentro del package.json del front pongo "proxy: "http://localhost:5000" para que traiga todos esos datos desde el servidor que cree con express.
+
+//! AXIOS
+//Es una libreria que me permite hacer http requests de una manera mucho más ordenada que solo haciendo fetch
+
+//! HEROKU 2
+// heroku apps : para saber qué aplicaciones tenemos en heroku
+// heroku git:remote -a name-of-the-project para añadir un nuevo remote al proyecto, por ejemplo heroku y origin, siendo origin el de git, y heroku el de heroku
+// heroku buildpack : para listar los buildpacks que tenemos en el proyecto
+// heroku buildpacks:remove pack-name  para remover algun buildpack
+// heroku config:set  VARIABLE  para añadir una variable al servidor de heroku, como por ejm una api key
+
+//! MOBILE RESPONSIVENESS
+//Para añadir estilos globales es decir responsive creo un nuevo archivo llamado global.styles, en el cual importo la funciln createGlobalStyles dsde styled-components, y al igual que en styled components meto todos los stylos que tengo en app.css allí, después pongo el componete encima de todo lo que se va a reenderizar de la app.js
+//Allí pongo los media queries
+
+//! PERFORMANCE
+// Para que la aplicacion cargue más rápido lo que hago es que divido el archivo que se le pasa al navegador en varios, para ello uso los siguiente , code splitting https://create-react-app.dev/docs/code-splitting/ , básicamente importamos lo que el usuario verá en ese momento.
+
+//? Import lazy desde 'react' en app.js, esta funcionalidad se la lleva muy bien con react router ya que eso es lo que quiere react route, partir el código en chunks, así que lo que lazy hace es reemplazar donde dice router con lazy, para que cuando se metan en una página solo cargue el pedazo correspondiente a esa página.
+
+//La sintax es muy fácil, solo envuelvo en componente en el lazy, vease app.js
+//? también import "Suspense" desde react que es lo que esperará a que carguen los componentes, ya que lazy es como una promesa.
+//Suspense tambien acepta el atributo "fallback", el cual nos deja reenderizar html hasta que se cargue el atributo
+
+//?Ahora para cargar cada pagina de la aplicacion hará falta tener internet siempre para que este cargando los pedazos continuamente, y para que ataje los errores escribo el nuevo componente error-boundary
+// lugo envuelvo los Suspense en el ErrorBoundary
+
+//!React.memo
+//?Import {memo} from 'react' y envuelvo el componente como si fuera connect para que no reenderice si sus props no cambian, ya que los functionalComponent reenderizan cada vez que el padre lo hace
+
+//? si no estoy usando un functional component sino una clase lo que hago es poner extends PureComponent, funciona de la misma manera que memo
+
+//En nuestra aplicacion puse memo en cart item, para que no se actualice cuando se añade un nuevo elemento, sino que solo se añada un nuevo elementeo y los viejos sigan alli, y no reenderice
+
+//! useCallback
+//? Es un hook que se añade para que no se reenderice una funcion cada vez que se reenderiza una componente,  o se que no se llama sin necesidad, se importa desde react, y se usa así, donde el primer argumento es la funcion y el segundo es un array de las dependencias que necesita la funcion, se usa la version memo de la funcion
+//* const logName = useCallback(() => console.log('Yihua),[])
+
+//!useMemo
+//? se usa casi igual que useCallback, no solo recuerda la funcion, sino que recuerda el resultado de la funcion, para regresar el mismo valor si no se cambian los argumentos
+
+//!Usamos useCallback cuando necesitamos memo funcion, useMemo cuando necesitamos memo resultados, y eso lo usamos cuando dicha funcion tiene mucha computacion.
+
+//!HEROKU 3
+//? Para comprimir los archivos en heroku, lo que hago es instalar una dependencia llamada yarn add compression, heroku por defecto la usara para comprimir los archivos cuando los esté pasando al servidor, pero esto solo se puede hacer si tenemos acceso al backend, ya que tenogo que crear una neva variable en el server.js llamada compression, que requiera la librería
+
+//!Profiler
+//? con la herramienta react developer tools puedo chequear que tanto tarda un comonente en hacer algo, desde react importo "Profiler" desde react, y envuelvo el componente que quiero medir con este componente,
+/*
+<Profiler
+ id='Directory'
+ onRender={(id, phase, actualDuration)=>{
+     console.log({
+         id,
+         phase,
+         actualDuration
+     })
+ }} >
+     <ComponenteAEvaluar></ComponenteAEvaluar>
+ </Profiler>
+ */
