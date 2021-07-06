@@ -4,13 +4,13 @@ import "firebase/auth";
 
 //
 const config = {
-  apiKey: "AIzaSyAIKsbxrOl3yDFLRydxN-pHghgNm03wGUo",
-  authDomain: "portfolio-e-commerce-6904e.firebaseapp.com",
-  projectId: "portfolio-e-commerce-6904e",
-  storageBucket: "portfolio-e-commerce-6904e.appspot.com",
-  messagingSenderId: "27274517545",
-  appId: "1:27274517545:web:2a4a21cd8a2a1ffad11038",
-  measurementId: "G-78ZN67SQ5L",
+  apiKey: "AIzaSyCkTG7MBe_V5vqo1HxhuWJfssHbG8HAAKw",
+  authDomain: "crown-ecomerce-react.firebaseapp.com",
+  projectId: "crown-ecomerce-react",
+  storageBucket: "crown-ecomerce-react.appspot.com",
+  messagingSenderId: "428364557619",
+  appId: "1:428364557619:web:1739d84fb1585747ab2246",
+  measurementId: "G-YBRXCZ3CW7",
 };
 //
 
