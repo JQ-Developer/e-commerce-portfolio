@@ -11,37 +11,43 @@ import {
 //Importando el boton de Stripe
 import StripeCheckoutButton from "../../components/stripe-button/stripe-button.component";
 
-import "./checkout.styles.scss";
+import {
+  CheckoutPageContainer,
+  CheckoutHeaderContainer,
+  HeaderBlockContainer,
+  TotalContainer,
+  WarningContainer,
+} from "./checkout.styles";
 
 const CheckoutPage = ({ cartItem, total }) => (
-  <div className="checkout-page">
-    <div className="checkout-header">
-      <div className="header-block">
+  <CheckoutPageContainer>
+    <CheckoutHeaderContainer>
+      <HeaderBlockContainer>
         <span>Product</span>
-      </div>
-      <div className="header-block">
+      </HeaderBlockContainer>
+      <HeaderBlockContainer>
         <span>Description</span>
-      </div>
-      <div className="header-block">
+      </HeaderBlockContainer>
+      <HeaderBlockContainer>
         <span>Quantity</span>
-      </div>
-      <div className="header-block">
+      </HeaderBlockContainer>
+      <HeaderBlockContainer>
         <span>Price</span>
-      </div>
-      <div className="header-block">
+      </HeaderBlockContainer>
+      <HeaderBlockContainer>
         <span>Remove</span>
-      </div>
-    </div>
+      </HeaderBlockContainer>
+    </CheckoutHeaderContainer>
     {cartItem.map((cartItem) => (
       <CheckoutItem key={cartItem.id} cartItem={cartItem} />
     ))}
-    <div className="total">${total}</div>
+    <TotalContainer>${total}</TotalContainer>
     <StripeCheckoutButton price={total} />
-    <div className="test-warning">
+    <WarningContainer>
       *Please use the following test credit card for payments*
       <p>4242 4242 4242 4242 --Exp:01/22 --CW:123</p>
-    </div>
-  </div>
+    </WarningContainer>
+  </CheckoutPageContainer>
 );
 
 const mapStateToProps = createStructuredSelector({

@@ -1,8 +1,6 @@
 import React, { useEffect, lazy, Suspense } from "react";
 import Spinner from "../../components/spinner/spinner.component";
-
 import { Route } from "react-router-dom";
-
 import { connect } from "react-redux";
 
 //saga
@@ -27,15 +25,6 @@ const ShopPage = ({ match, fetchCollectionsStart }) => {
         <Route
           exact
           path={`${match.path}`}
-          /*
-          Esto es para cuando no estamos usando el patron container para elementos de alto orden
-          render={(props) => (
-            <CollectionsOverviewWithSpinner
-            isLoading={isCollectionFetching}
-            {...props}
-            />
-            )}
-          */
           component={CollectionsOverviewContainer}
         />
         <Route

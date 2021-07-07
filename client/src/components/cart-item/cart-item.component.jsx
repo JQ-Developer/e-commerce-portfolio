@@ -1,18 +1,20 @@
 import { memo } from "react";
+import {
+  CartItemContainer,
+  CartItemImage,
+  ItemDetailsContainer,
+} from "./cart-item.styled";
 
-import "./cart-item.styles.scss";
-
-//Es lo mismo que decir props.image.price...
 const CartItem = ({ item: { imageUrl, price, name, quantity } }) => (
-  <div className="cart-item">
-    <img src={imageUrl} alt="item" />
-    <div className="item-details">
+  <CartItemContainer>
+    <CartItemImage src={imageUrl} alt="item" />
+    <ItemDetailsContainer>
       <span className="name">{name}</span>
       <span className="price">
         {quantity} x ${price}
       </span>
-    </div>
-  </div>
+    </ItemDetailsContainer>
+  </CartItemContainer>
 );
 
 export default memo(CartItem);
