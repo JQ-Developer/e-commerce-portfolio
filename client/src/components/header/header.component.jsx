@@ -29,7 +29,7 @@ const Header = ({ currentUser, hidden, signOutStart }) => (
 
     <OptionsContainer>
       <OptionLink to="/shop">SHOP</OptionLink>
-      <OptionLink to="/shop">CONTACT</OptionLink>
+      {/* <OptionLink to="/shop">CONTACT</OptionLink> */}
       {currentUser ? (
         //auth.signOut es un metodo que provee auth
         <OptionLink as="div" onClick={signOutStart}>
